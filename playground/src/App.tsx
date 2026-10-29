@@ -30,7 +30,7 @@ const presets: { name: string, config: Config }[] = [
     config: {
       ...base(0.5),
       mode: 'pro',
-      pro: { refraction: 150, aberration: 6, bezel: 0.4, blur: 0, saturation: 1.4 },
+      pro: { refraction: 1.2, aberration: 0.05, bezel: 0.4, blur: 0.5, saturation: 1.4 },
       radius: 999,
       width: 200,
       height: 200,
@@ -46,15 +46,15 @@ const presets: { name: string, config: Config }[] = [
     config: {
       ...base(0.5),
       mode: 'pro',
-      pro: { refraction: 40, aberration: 1, bezel: 0.12, blur: 5, saturation: 1.8 },
+      pro: { refraction: 0.8, aberration: 0.02, bezel: 0.12, blur: 5, saturation: 1.8 },
       tint: 0.18,
     },
   },
 ]
 
 const proFields: { key: keyof GlassOptions, label: string, min: number, max: number, step: number }[] = [
-  { key: 'refraction', label: '折射 refraction', min: -200, max: 200, step: 1 },
-  { key: 'aberration', label: '色散 aberration', min: 0, max: 20, step: 0.5 },
+  { key: 'refraction', label: '折射 refraction', min: -3, max: 3, step: 0.05 },
+  { key: 'aberration', label: '色散 aberration', min: 0, max: 0.5, step: 0.01 },
   { key: 'bezel', label: '边框 bezel', min: 0, max: 0.5, step: 0.01 },
   { key: 'blur', label: '模糊 blur', min: 0, max: 10, step: 0.1 },
   { key: 'saturation', label: '饱和度 saturation', min: 0, max: 3, step: 0.05 },
@@ -100,6 +100,7 @@ export function App() {
   const derived = resolveOptions(c.intensity)
   const shown = c.mode === 'intensity' ? derived : c.pro
   const glassProps = c.mode === 'intensity' ? { intensity: c.intensity } : c.pro
+  const flowProps = { ...glassProps, radius: Math.min(c.radius, 32), tint: `rgba(255, 255, 255, ${c.tint})` }
 
   const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
     e.currentTarget.setPointerCapture(e.pointerId)
@@ -112,32 +113,65 @@ export function App() {
   return (
     <div className="page">
       <div className="scene">
-        <h1 className="bg-title">Liquidrop</h1>
-        <p className="bg-text">
-          The quick brown fox jumps over the lazy dog. 敏捷的棕色狐狸跳过了懒狗。
-          Liquid glass bends the light around its edges — drag the glass around to see it.
-        </p>
-        <div className="bg-stripes" />
-        <div className="bg-dots" />
+        {/* 悬浮元素：可拖动的玻璃 */}
+        <div className="stage">
+          <h1 className="bg-title">Liquidrop</h1>
+          <p className="bg-text">
+            The quick brown fox jumps over the lazy dog. 敏捷的棕色狐狸跳过了懒狗。
+            Liquid glass bends the light around its edges — drag the glass around to see it.
+          </p>
+          <div className="bg-stripes" />
+          <div className="bg-dots" />
 
-        <LiquidGlass
-          {...glassProps}
-          radius={c.radius}
-          tint={`rgba(255, 255, 255, ${c.tint})`}
-          className="glass"
-          style={{ width: c.width, height: c.height, left: pos.x, top: pos.y }}
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={() => (drag.current = null)}
-        >
-          <span className="glass-label">拖动我 · Drag me</span>
-        </LiquidGlass>
+          <LiquidGlass
+            {...glassProps}
+            radius={c.radius}
+            tint={`rgba(255, 255, 255, ${c.tint})`}
+            className="glass"
+            style={{ width: c.width, height: c.height, left: pos.x, top: pos.y }}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={() => (drag.current = null)}
+          >
+            <span className="glass-label">拖动我 · Drag me</span>
+          </LiquidGlass>
 
-        <LiquidGlass className="toolbar" radius={999} intensity={0.6}>
-          <button type="button">◀</button>
-          <button type="button">▶</button>
-          <button type="button">♥</button>
-        </LiquidGlass>
+          <LiquidGlass className="toolbar" radius={999} intensity={0.6}>
+            <button type="button">◀</button>
+            <button type="button">▶</button>
+            <button type="button">♥</button>
+          </LiquidGlass>
+        </div>
+
+        {/* 普通文档流中的元素：nav / article / button / input，使用右侧面板的参数 */}
+        <section className="flow">
+          <LiquidGlass as="nav" className="flow-nav" {...flowProps}>
+            <strong>Liquidrop</strong>
+            <a href="#home">首页</a>
+            <a href="#docs">文档</a>
+            <a href="#about">关于</a>
+          </LiquidGlass>
+
+          <h2 className="flow-title">在普通元素上使用</h2>
+          <div className="flow-grid">
+            {(['article', 'section', 'aside'] as const).map(tag => (
+              <LiquidGlass key={tag} as={tag} className="flow-card" {...flowProps}>
+                <h3>{`<${tag}>`}</h3>
+                <p>普通文档流里的块级元素，宽度自适应，内容撑开高度。</p>
+              </LiquidGlass>
+            ))}
+          </div>
+
+          <div className="flow-row">
+            <LiquidGlass as="button" type="button" className="flow-button" {...flowProps} radius={999}>
+              按钮 button
+            </LiquidGlass>
+            <LiquidGlass as="input" className="flow-input" placeholder="输入框 input" {...flowProps} radius={999} />
+            <LiquidGlass as="span" className="flow-tag" {...flowProps} radius={999}>
+              行内 span
+            </LiquidGlass>
+          </div>
+        </section>
       </div>
 
       <aside className="panel">

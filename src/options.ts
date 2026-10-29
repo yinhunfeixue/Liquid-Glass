@@ -1,8 +1,8 @@
 /** 专业参数，均可单独覆盖由 intensity 推导出的值 */
 export interface GlassOptions {
-  /** 边缘折射位移量（px），正值向内取样，负值向外取样 */
+  /** 折射强度，边缘最大位移 ≈ 边框宽度 × refraction，随元素尺寸自动缩放；负值反向 */
   refraction: number
-  /** 色散偏移（px），RGB 三通道位移差 */
+  /** 色散，RGB 三通道位移的相对差值，0 ~ 0.5 */
   aberration: number
   /** 折射边框宽度，占短边的比例，0 ~ 0.5 */
   bezel: number
@@ -20,10 +20,11 @@ export type GlassOverrides = { [K in keyof GlassOptions]?: GlassOptions[K] | und
 export function resolveOptions(intensity = 0.5, overrides: GlassOverrides = {}): GlassOptions {
   const i = clamp(intensity, 0, 1)
   const base: GlassOptions = {
-    refraction: Math.round(20 + 100 * i),
-    aberration: Math.round(8 * i * 10) / 10,
+    refraction: Math.round((0.4 + 1.2 * i) * 100) / 100,
+    aberration: Math.round(0.15 * i * 100) / 100,
     bezel: Math.round((0.08 + 0.17 * i) * 100) / 100,
-    blur: Math.round(1.5 * i * 10) / 10,
+    // 保留一点基础模糊，避免中间区域完全透明
+    blur: Math.round((0.6 + 2.4 * i) * 10) / 10,
     saturation: Math.round((1 + 0.6 * i) * 100) / 100,
   }
   const merged = { ...base }
@@ -32,6 +33,7 @@ export function resolveOptions(intensity = 0.5, overrides: GlassOverrides = {}):
     if (typeof v === 'number' && Number.isFinite(v)) merged[key] = v
   }
   merged.bezel = clamp(merged.bezel, 0, 0.5)
+  merged.aberration = clamp(merged.aberration, 0, 0.5)
   merged.blur = Math.max(0, merged.blur)
   merged.saturation = Math.max(0, merged.saturation)
   return merged

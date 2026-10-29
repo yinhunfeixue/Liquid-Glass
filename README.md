@@ -32,9 +32,9 @@ import { LiquidGlass } from 'liquidrop'
 
 ```jsx
 <LiquidGlass
-  refraction={120}
-  aberration={6}
-  bezel={0.3}
+  refraction={1.2}
+  aberration={0.05}
+  bezel={0.4}
   blur={0.5}
   saturation={1.4}
   radius={999}
@@ -43,17 +43,26 @@ import { LiquidGlass } from 'liquidrop'
 />
 ```
 
+用 `as` 渲染成任意元素，可直接放在普通文档流中，`ref` 指向该元素：
+
+```jsx
+<LiquidGlass as="nav">...</LiquidGlass>
+<LiquidGlass as="button" type="button" onClick={onClick}>按钮</LiquidGlass>
+<LiquidGlass as="input" placeholder="搜索" radius={999} />
+```
+
 | 参数 | 说明 | 默认 |
 | --- | --- | --- |
 | `intensity` | 整体强度 0 ~ 1 | `0.5` |
-| `refraction` | 边缘折射位移（px），负值反向 | 由强度推导 |
-| `aberration` | 色散偏移（px） | 由强度推导 |
+| `refraction` | 折射强度，按元素尺寸自动缩放，负值反向 | 由强度推导 |
+| `aberration` | 色散 0 ~ 0.5 | 由强度推导 |
 | `bezel` | 折射边框宽度，占短边比例 0 ~ 0.5 | 由强度推导 |
 | `blur` | 模糊（px） | 由强度推导 |
 | `saturation` | 饱和度倍数 | 由强度推导 |
 | `radius` | 圆角（px） | `24` |
 | `tint` | 玻璃底色 | `rgba(255, 255, 255, 0.08)` |
+| `as` | 渲染的元素或组件 | `'div'` |
 
-其余属性（`className`、`style`、事件等）透传到根 `div`。
+其余属性（`className`、`style`、事件等）透传到根元素。
 
 在线调参演示：构建后打开 `demo/index.html`（`pnpm demo`）。

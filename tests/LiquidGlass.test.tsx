@@ -1,4 +1,5 @@
 import { cleanup, render } from '@testing-library/react'
+import { createRef } from 'react'
 import { afterEach, beforeAll, describe, expect, test } from 'vitest'
 import { createDisplacementMap, LiquidGlass, resolveOptions } from '../src'
 
@@ -28,15 +29,16 @@ describe('resolveOptions', () => {
   })
 
   test('专业参数优先于强度推导值，undefined 不覆盖', () => {
-    const opts = resolveOptions(0.5, { refraction: -80, blur: 3, aberration: undefined })
-    expect(opts.refraction).toBe(-80)
+    const opts = resolveOptions(0.5, { refraction: -0.8, blur: 3, aberration: undefined })
+    expect(opts.refraction).toBe(-0.8)
     expect(opts.blur).toBe(3)
     expect(opts.aberration).toBe(resolveOptions(0.5).aberration)
   })
 
   test('非法值会被修正', () => {
-    const opts = resolveOptions(0.5, { bezel: 2, blur: -1, saturation: -1 })
+    const opts = resolveOptions(0.5, { bezel: 2, aberration: 9, blur: -1, saturation: -1 })
     expect(opts.bezel).toBe(0.5)
+    expect(opts.aberration).toBe(0.5)
     expect(opts.blur).toBe(0)
     expect(opts.saturation).toBe(0)
   })
@@ -76,23 +78,55 @@ describe('<LiquidGlass />', () => {
   })
 
   test('生成 SVG 滤镜，id 合法且参数生效', () => {
-    const { container } = render(<LiquidGlass refraction={66} aberration={4} blur={2} />)
-    const filter = container.querySelector('filter')!
+    render(<LiquidGlass refraction={1} aberration={0.1} bezel={0.2} blur={2} />)
+    const filter = document.querySelector('filter')!
     expect(filter.id).toMatch(/^liquidrop-[\w-]+$/)
-    const scales = [...container.querySelectorAll('feDisplacementMap')].map(n => n.getAttribute('scale'))
-    expect(scales).toEqual(['66', '70', '74'])
-    expect(container.querySelector('feGaussianBlur')!.getAttribute('stdDeviation')).toBe('2')
-    expect(container.querySelector('feImage')!.getAttribute('width')).toBe('200')
+    // 边框 = 短边 100 * 0.2 = 20，位移量 = 20 * 1 * 2 = 40，色散逐通道 +10%
+    const scales = [...document.querySelectorAll('feDisplacementMap')].map(n => n.getAttribute('scale'))
+    expect(scales).toEqual(['40', '44', '48'])
+    expect(document.querySelector('feGaussianBlur')!.getAttribute('stdDeviation')).toBe('2')
+    expect(document.querySelector('feImage')!.getAttribute('width')).toBe('200')
   })
 
   test('多个实例的滤镜 id 不重复', () => {
-    const { container } = render(
+    render(
       <>
         <LiquidGlass />
         <LiquidGlass />
       </>,
     )
-    const ids = [...container.querySelectorAll('filter')].map(f => f.id)
+    const ids = [...document.querySelectorAll('filter')].map(f => f.id)
+    expect(ids.length).toBe(2)
     expect(new Set(ids).size).toBe(2)
+  })
+
+  test('只设置强度时也带有基础模糊', () => {
+    expect(resolveOptions(0).blur).toBeGreaterThan(0)
+    render(<LiquidGlass intensity={0.5} />)
+    expect(Number(document.querySelector('feGaussianBlur')!.getAttribute('stdDeviation'))).toBeGreaterThan(1)
+  })
+
+  test('通过 as 渲染为普通元素，不插入额外子节点，ref 指向该元素', () => {
+    const ref = createRef<HTMLButtonElement>()
+    const { container } = render(
+      <LiquidGlass as="button" type="button" ref={ref}>
+        OK
+      </LiquidGlass>,
+    )
+    const button = container.querySelector('button')!
+    expect(ref.current).toBe(button)
+    expect(button.getAttribute('type')).toBe('button')
+    expect(button.childNodes.length).toBe(1)
+    expect(button.textContent).toBe('OK')
+    // 滤镜在 body 上，而不是在按钮内部
+    expect(button.querySelector('filter')).toBeNull()
+    expect(document.querySelector('filter')).not.toBeNull()
+  })
+
+  test('void 元素（input）也能使用，且不应用默认尺寸', () => {
+    const { container } = render(<LiquidGlass as="input" placeholder="search" />)
+    const input = container.querySelector('input')!
+    expect(input.placeholder).toBe('search')
+    expect(input.style.width).toBe('')
   })
 })

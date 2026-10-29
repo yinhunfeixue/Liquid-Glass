@@ -12,8 +12,13 @@ body {
 }
 
 .scene {
-  position: relative;
   flex: 1;
+  overflow-y: auto;
+}
+
+.stage {
+  position: relative;
+  height: 100vh;
   overflow: hidden;
   background:
     radial-gradient(circle at 20% 25%, #ff6b6b 0 12%, transparent 13%),
@@ -103,6 +108,58 @@ body {
 }
 
 .toolbar button:hover { background: rgba(255, 255, 255, 0.15); }
+
+/* 普通文档流示例 */
+.flow {
+  padding: 24px 40px 80px;
+  color: #fff;
+  background:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.12) 0 2px, transparent 2px 22px),
+    radial-gradient(circle at 15% 40%, #ff8a5c 0 14%, transparent 15%),
+    radial-gradient(circle at 80% 70%, #3ec7a6 0 16%, transparent 17%),
+    linear-gradient(160deg, #1e3c72, #6a3093 60%, #a044ff);
+}
+
+.flow-nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 14px 24px;
+}
+
+.flow-nav a { color: inherit; text-decoration: none; }
+
+.flow-title { margin: 48px 0 20px; font-size: 40px; }
+
+.flow-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.flow-card { padding: 20px 24px; }
+.flow-card h3 { margin: 0 0 8px; font-family: ui-monospace, monospace; }
+.flow-card p { margin: 0; line-height: 1.6; }
+
+.flow-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.flow-button, .flow-input {
+  padding: 12px 24px;
+  border: 0;
+  color: #fff;
+  font: inherit;
+  outline: none;
+}
+
+.flow-button { cursor: pointer; }
+.flow-input::placeholder { color: rgba(255, 255, 255, 0.8); }
+.flow-tag { padding: 6px 14px; }
 
 .panel {
   width: 340px;
