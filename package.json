@@ -4,6 +4,11 @@
   "version": "0.1.0",
   "description": "iOS-style liquid glass React component powered by SVG filters.",
   "license": "MIT",
+  "homepage": "https://yinhunfeixue.github.io/Liquid-Glass/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yinhunfeixue/Liquid-Glass.git"
+  },
   "keywords": [
     "react",
     "liquid-glass",

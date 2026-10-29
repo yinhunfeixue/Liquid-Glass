@@ -1,6 +1,6 @@
 # Liquidrop
 
-简体中文 | [English](./README.en.md)
+简体中文 | [English](./README.en.md) | [在线 Demo](https://yinhunfeixue.github.io/Liquid-Glass/)
 
 ## 简介
 
