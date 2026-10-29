@@ -24,7 +24,7 @@ export function resolveOptions(intensity = 0.5, overrides: GlassOverrides = {}):
     aberration: Math.round(0.15 * i * 100) / 100,
     bezel: Math.round((0.08 + 0.17 * i) * 100) / 100,
     // 保留一点基础模糊，避免中间区域完全透明
-    blur: Math.round((0.6 + 2.4 * i) * 10) / 10,
+    blur: Math.round((1 + 4 * i) * 10) / 10,
     saturation: Math.round((1 + 0.6 * i) * 100) / 100,
   }
   const merged = { ...base }

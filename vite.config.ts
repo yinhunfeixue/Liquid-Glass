@@ -8,7 +8,7 @@ export default defineConfig({
   root: './playground',
   plugins: [react(), viteSingleFile()],
   resolve: {
-    alias: { liquidrop: fileURLToPath(new URL('./src/index.ts', import.meta.url)) },
+    alias: { 'liquid-glass2': fileURLToPath(new URL('./src/index.ts', import.meta.url)) },
   },
   build: {
     outDir: '../demo',

@@ -1,5 +1,5 @@
 import { useRef, useState, type PointerEvent } from 'react'
-import { LiquidGlass, resolveOptions, type GlassOptions } from 'liquidrop'
+import { LiquidGlass, resolveOptions, type GlassOptions } from 'liquid-glass2'
 
 interface Config {
   mode: 'intensity' | 'pro'
@@ -115,7 +115,7 @@ export function App() {
       <div className="scene">
         {/* 悬浮元素：可拖动的玻璃 */}
         <div className="stage">
-          <h1 className="bg-title">Liquidrop</h1>
+          <h1 className="bg-title">Liquid Glass</h1>
           <p className="bg-text">
             The quick brown fox jumps over the lazy dog. 敏捷的棕色狐狸跳过了懒狗。
             Liquid glass bends the light around its edges — drag the glass around to see it.
@@ -146,7 +146,7 @@ export function App() {
         {/* 普通文档流中的元素：nav / article / button / input，使用右侧面板的参数 */}
         <section className="flow">
           <LiquidGlass as="nav" className="flow-nav" {...flowProps}>
-            <strong>Liquidrop</strong>
+            <strong>liquid-glass2</strong>
             <a href="#home">首页</a>
             <a href="#docs">文档</a>
             <a href="#about">关于</a>
@@ -175,7 +175,7 @@ export function App() {
       </div>
 
       <aside className="panel">
-        <h2>Liquidrop</h2>
+        <h2>liquid-glass2</h2>
         <section>
           <h3>推荐效果</h3>
           <div className="presets">

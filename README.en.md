@@ -1,4 +1,4 @@
-# Liquidrop
+# liquid-glass2
 
 [简体中文](./README.md) | English | [Live Demo](https://yinhunfeixue.github.io/Liquid-Glass/)
 
@@ -11,11 +11,11 @@ Refraction requires a Chromium-based browser (Chrome, Edge). Other browsers show
 ## Usage
 
 ```bash
-npm i liquidrop
+npm i liquid-glass2
 ```
 
 ```jsx
-import { LiquidGlass } from 'liquidrop'
+import { LiquidGlass } from 'liquid-glass2'
 
 <LiquidGlass />
 
@@ -46,7 +46,7 @@ Use `as` to render any element. `ref` points to that element, and other props ar
 | `refraction` | Refraction strength, scales with element size, negative flips direction | derived |
 | `aberration` | Chromatic aberration, 0 to 0.5 | derived |
 | `bezel` | Refracting rim width as a fraction of the short side, 0 to 0.5 | derived |
-| `blur` | Blur in px | derived |
+| `blur` | Blur in px | derived, `3` at default intensity |
 | `saturation` | Saturation multiplier | derived |
 | `radius` | Border radius in px | `24` |
 | `tint` | Glass background color | `rgba(255, 255, 255, 0.08)` |

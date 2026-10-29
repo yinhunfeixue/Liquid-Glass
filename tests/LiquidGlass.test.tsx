@@ -80,7 +80,7 @@ describe('<LiquidGlass />', () => {
   test('生成 SVG 滤镜，id 合法且参数生效', () => {
     render(<LiquidGlass refraction={1} aberration={0.1} bezel={0.2} blur={2} />)
     const filter = document.querySelector('filter')!
-    expect(filter.id).toMatch(/^liquidrop-[\w-]+$/)
+    expect(filter.id).toMatch(/^liquid-glass2-[\w-]+$/)
     // 边框 = 短边 100 * 0.2 = 20，位移量 = 20 * 1 * 2 = 40，色散逐通道 +10%
     const scales = [...document.querySelectorAll('feDisplacementMap')].map(n => n.getAttribute('scale'))
     expect(scales).toEqual(['40', '44', '48'])
@@ -102,6 +102,8 @@ describe('<LiquidGlass />', () => {
 
   test('只设置强度时也带有基础模糊', () => {
     expect(resolveOptions(0).blur).toBeGreaterThan(0)
+    // 默认强度 0.5 对应模糊 3px
+    expect(resolveOptions().blur).toBe(3)
     render(<LiquidGlass intensity={0.5} />)
     expect(Number(document.querySelector('feGaussianBlur')!.getAttribute('stdDeviation'))).toBeGreaterThan(1)
   })

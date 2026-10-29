@@ -1,4 +1,4 @@
-# Liquidrop
+# liquid-glass2
 
 简体中文 | [English](./README.en.md) | [在线 Demo](https://yinhunfeixue.github.io/Liquid-Glass/)
 
@@ -11,11 +11,11 @@
 ## 用法
 
 ```bash
-npm i liquidrop
+npm i liquid-glass2
 ```
 
 ```jsx
-import { LiquidGlass } from 'liquidrop'
+import { LiquidGlass } from 'liquid-glass2'
 
 <LiquidGlass />
 
@@ -46,7 +46,7 @@ import { LiquidGlass } from 'liquidrop'
 | `refraction` | 折射强度，随元素尺寸缩放，负值反向 | 由强度计算 |
 | `aberration` | 色散，0 ~ 0.5 | 由强度计算 |
 | `bezel` | 折射边框宽度，占短边比例，0 ~ 0.5 | 由强度计算 |
-| `blur` | 模糊（px） | 由强度计算 |
+| `blur` | 模糊（px） | 由强度计算，默认强度下为 `3` |
 | `saturation` | 饱和度倍数 | 由强度计算 |
 | `radius` | 圆角（px） | `24` |
 | `tint` | 玻璃底色 | `rgba(255, 255, 255, 0.08)` |

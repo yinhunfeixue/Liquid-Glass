@@ -51,7 +51,7 @@ function LiquidGlassImpl(
   const elRef = useRef<HTMLElement | null>(null)
   const [size, setSize] = useState({ width: 0, height: 0 })
   const [svgOk, setSvgOk] = useState(false)
-  const id = `liquidrop-${useId().replace(/[^\w-]/g, '')}`
+  const id = `liquid-glass2-${useId().replace(/[^\w-]/g, '')}`
 
   const opts = resolveOptions(intensity, { refraction, aberration, bezel, blur, saturation })
 
@@ -139,7 +139,7 @@ function LiquidGlassImpl(
 
   return (
     <>
-      <Tag ref={setRef} data-liquidrop="" style={rootStyle} {...rest}>
+      <Tag ref={setRef} data-liquid-glass2="" style={rootStyle} {...rest}>
         {children}
       </Tag>
       {ready && createPortal(filter, document.body)}

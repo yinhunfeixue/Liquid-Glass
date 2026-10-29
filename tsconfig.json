@@ -12,7 +12,7 @@
     "declaration": true,
     "emitDeclarationOnly": true,
     "verbatimModuleSyntax": true,
-    "paths": { "liquidrop": ["./src/index.ts"] }
+    "paths": { "liquid-glass2": ["./src/index.ts"] }
   },
   "include": ["src", "tests", "playground/src"]
 }
