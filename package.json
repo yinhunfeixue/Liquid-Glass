@@ -1,7 +1,7 @@
 {
   "name": "liquid-glass2",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "iOS-style liquid glass React component powered by SVG filters.",
   "license": "MIT",
   "author": "yinhunfeixue <yinhunfeixue@163.com>",
