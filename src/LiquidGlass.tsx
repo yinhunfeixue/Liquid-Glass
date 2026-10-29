@@ -65,7 +65,11 @@ function LiquidGlassImpl(
     setSvgOk(supportsSvgBackdrop())
     const el = elRef.current
     if (!el) return
-    const measure = () => setSize({ width: el.offsetWidth, height: el.offsetHeight })
+    const measure = () => {
+      const width = el.offsetWidth
+      const height = el.offsetHeight
+      setSize(s => (s.width === width && s.height === height ? s : { width, height }))
+    }
     measure()
     if (typeof ResizeObserver === 'undefined') return
     const ro = new ResizeObserver(measure)
@@ -77,7 +81,7 @@ function LiquidGlassImpl(
   const ready = width > 0 && height > 0
   const backdrop = ready && svgOk
     ? `url(#${id}) saturate(${opts.saturation})`
-    : `blur(${Math.max(4, opts.blur * 4)}px) saturate(${opts.saturation})`
+    : `blur(${Math.max(4, opts.blur * 2)}px) saturate(${opts.saturation})`
 
   const rootStyle: CSSProperties = {
     borderRadius: radius,
